@@ -23,6 +23,8 @@ fn main() {
 `~!@#$%^&*()-_=+[{]}\|;:'",<.>/?"<>?"#;
     const ALL_CHARS_INDEX_LENGTH: usize = ALL_CHARS.len() - 1;
 
+    let start_time = time::Instant::now();
+
     for c in HAMLET.chars() {
         let mut random_idx: usize = rand::rng().random_range(0..ALL_CHARS_INDEX_LENGTH);
         let mut random_char: char = ALL_CHARS.chars().nth(random_idx).unwrap();
@@ -64,4 +66,17 @@ fn main() {
 
         // thread::sleep(time::Duration::from_millis(10));
     }
+
+    let final_time = start_time.elapsed().as_millis();
+    let performance_print: String = format!(
+        r#"
+
+    ------------------------
+    |
+    |  time: {final_time} ms
+    |
+    ------------------------
+    "#
+    );
+    println!("{}", performance_print);
 }
