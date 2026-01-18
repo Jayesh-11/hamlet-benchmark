@@ -1,1 +1,2 @@
-pub mod constants;
+pub mod all_chars;
+pub mod hamlet;

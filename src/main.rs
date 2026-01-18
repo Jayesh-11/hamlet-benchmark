@@ -1,5 +1,6 @@
 mod constants;
-use crate::constants::constants::HAMLET;
+use crate::constants::all_chars::ALL_CHARS;
+use crate::constants::hamlet::HAMLET;
 use clap::Parser;
 use std::io::{self, Write};
 
@@ -19,8 +20,6 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    const ALL_CHARS: &'static str = r#"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 	
-`~!@#$%^&*()-_=+[{]}\|;:'",<.>/?"<>?"#;
     const ALL_CHARS_INDEX_LENGTH: usize = ALL_CHARS.len() - 1;
 
     let start_time = time::Instant::now();
