@@ -48,6 +48,11 @@ fn main() {
         // we need to move to end of line of previous line and remove the last character/tab(tab
         // will be somewhat more complex) and then add new \n
 
+        if random_char == '\n' {
+            print!(" ");
+            io::stdout().flush().unwrap();
+        }
+
         print!("{}", random_char);
         io::stdout().flush().unwrap();
 
