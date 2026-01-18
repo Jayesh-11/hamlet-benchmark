@@ -23,6 +23,7 @@ fn main() {
     const ALL_CHARS_INDEX_LENGTH: usize = ALL_CHARS.len() - 1;
 
     let start_time = time::Instant::now();
+    let mut iterations = 0;
 
     for c in HAMLET.chars() {
         let mut random_idx: usize = rand::rng().random_range(0..ALL_CHARS_INDEX_LENGTH);
@@ -30,13 +31,11 @@ fn main() {
         while c != random_char {
             random_idx = rand::rng().random_range(0..ALL_CHARS_INDEX_LENGTH);
             random_char = ALL_CHARS.chars().nth(random_idx).unwrap();
+            iterations += 1;
 
             thread::sleep(time::Duration::from_millis(args.delay));
 
-            if random_char == '\t' {
-                continue;
-            }
-            if random_char == '\n' {
+            if random_char == '\t' || random_char == '\n' {
                 continue;
             }
 
@@ -66,13 +65,20 @@ fn main() {
         // thread::sleep(time::Duration::from_millis(10));
     }
 
+    if args.delay > 0 {
+        return;
+    }
+
     let final_time = start_time.elapsed().as_millis();
+    let iterations_per_ms = iterations / final_time;
     let performance_print: String = format!(
         r#"
 
     ------------------------
     |
     |  time: {final_time} ms
+    |  iterations: {iterations}
+    |  iterations/ms: {iterations_per_ms}
     |
     ------------------------
     "#
