@@ -12,9 +12,9 @@ struct Args {
     /// Delay in ms on each iteration
     #[arg(short, long, default_value_t = 0)]
     delay: u64,
-    //// Number of times to greet
-    // #[arg(short, long, default_value_t = 1)]
-    // count: u8,
+    //// Enable random colors for each iteration
+    #[arg(short, long, default_value_t = false)]
+    random_color_mode: bool,
 }
 
 fn main() {
@@ -39,7 +39,13 @@ fn main() {
                 continue;
             }
 
-            print!("{}\x08", random_char);
+            if args.random_color_mode == true {
+                let random_bright_color_idx: usize = rand::rng().random_range(40..231);
+                print!("{}\x1b[48;5;{}m\x08", random_char, random_bright_color_idx);
+            } else {
+                print!("{}\x08", random_char);
+            }
+
             io::stdout().flush().unwrap();
             // print!("\x1b[1D");
         }
