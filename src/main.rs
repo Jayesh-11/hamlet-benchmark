@@ -10,12 +10,21 @@ use std::{thread, time};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
+    /// Italics
+    #[arg(short, long, default_value_t = true)]
+    italics: bool,
+
     /// Delay in ms on each iteration
     #[arg(short, long, default_value_t = 0)]
     delay: u64,
-    //// Enable random colors for each iteration
+
+    /// Enable random colors for each iteration
     #[arg(short, long, default_value_t = false)]
     random_color_mode: bool,
+
+    /// Just print, no randomness
+    #[arg(short, long, default_value_t = false)]
+    just_print: bool,
 }
 
 fn main() {
@@ -26,6 +35,16 @@ fn main() {
     let mut iterations = 0;
 
     for c in HAMLET.chars() {
+        if args.just_print == true {
+            if args.delay > 0 {
+                thread::sleep(time::Duration::from_millis(args.delay));
+            }
+            iterations += 1;
+            print!("{}", c);
+            io::stdout().flush().unwrap();
+            continue;
+        }
+
         let mut random_idx: usize = rand::rng().random_range(0..ALL_CHARS_INDEX_LENGTH);
         let mut random_char: char = ALL_CHARS.chars().nth(random_idx).unwrap();
         while c != random_char {
@@ -33,7 +52,9 @@ fn main() {
             random_char = ALL_CHARS.chars().nth(random_idx).unwrap();
             iterations += 1;
 
-            thread::sleep(time::Duration::from_millis(args.delay));
+            if args.delay > 0 {
+                thread::sleep(time::Duration::from_millis(args.delay));
+            }
 
             if random_char == '\t' || random_char == '\n' {
                 continue;
@@ -47,7 +68,6 @@ fn main() {
             }
 
             io::stdout().flush().unwrap();
-            // print!("\x1b[1D");
         }
         // print!("\x1b[1D");
         // https://stackoverflow.com/questions/53162888/is-there-an-ansi-control-sequence-which-moves-the-cursor-to-the-end-of-line
@@ -59,10 +79,8 @@ fn main() {
             io::stdout().flush().unwrap();
         }
 
-        print!("{}", random_char);
+        print!("{}\x1b[3m", random_char);
         io::stdout().flush().unwrap();
-
-        // thread::sleep(time::Duration::from_millis(10));
     }
 
     if args.delay > 0 {
