@@ -25,6 +25,10 @@ struct Args {
     /// Just print, no randomness
     #[arg(short, long, default_value_t = false)]
     just_print: bool,
+
+    /// Benchmark mode, no prints
+    #[arg(short, long, default_value_t = false)]
+    benchmark: bool,
 }
 
 fn main() {
@@ -40,8 +44,10 @@ fn main() {
                 thread::sleep(time::Duration::from_millis(args.delay));
             }
             iterations += 1;
-            print!("{}", c);
-            io::stdout().flush().unwrap();
+            if args.benchmark == false {
+                print!("{}", c);
+                io::stdout().flush().unwrap();
+            }
             continue;
         }
 
@@ -62,28 +68,35 @@ fn main() {
 
             if args.random_color_mode == true {
                 let random_bright_color_idx: usize = rand::rng().random_range(40..231);
-                print!("{}\x1b[48;5;{}m\x08", random_char, random_bright_color_idx);
+
+                if args.benchmark == false {
+                    print!("{}\x1b[48;5;{}m\x08", random_char, random_bright_color_idx);
+                }
             } else {
-                print!("{}\x08", random_char);
+                if args.benchmark == false {
+                    print!("{}\x08", random_char);
+                }
             }
 
-            io::stdout().flush().unwrap();
+            if args.benchmark == false {
+                io::stdout().flush().unwrap();
+            }
         }
-        // print!("\x1b[1D");
-        // https://stackoverflow.com/questions/53162888/is-there-an-ansi-control-sequence-which-moves-the-cursor-to-the-end-of-line
-        // we need to move to end of line of previous line and remove the last character/tab(tab
-        // will be somewhat more complex) and then add new \n
 
         if random_char == '\n' {
-            print!(" ");
-            io::stdout().flush().unwrap();
+            if args.benchmark == false {
+                print!(" ");
+                io::stdout().flush().unwrap();
+            }
         }
 
-        print!("{}\x1b[3m", random_char);
-        io::stdout().flush().unwrap();
+        if args.benchmark == false {
+            print!("{}\x1b[3m", random_char);
+            io::stdout().flush().unwrap();
+        }
     }
 
-    if args.delay > 0 {
+    if args.delay > 0 || args.benchmark == false {
         return;
     }
 
