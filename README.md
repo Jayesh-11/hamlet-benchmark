@@ -4,6 +4,7 @@ Inspired by infinite monkey experiment and scramble effect
 
 - Computer have gotten pretty fast, so here goes a dumb experiment and benchmarking tool
 
+```
   -i, --italics            Italics
   -d, --delay <DELAY>      Delay in ms on each iteration [default: 0]
   -r, --random-color-mode  Enable random colors for each iteration
@@ -11,6 +12,7 @@ Inspired by infinite monkey experiment and scramble effect
   -b, --benchmark          Benchmark mode, no prints
   -h, --help               Print help
   -V, --version            Print version
+```
 
 ## Modes
 
