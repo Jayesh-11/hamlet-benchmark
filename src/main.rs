@@ -1,35 +1,16 @@
 mod constants;
+mod features;
 use crate::constants::all_chars::ALL_CHARS;
 use crate::constants::hamlet::HAMLET;
+use crate::features::clap::structs::Args;
 use clap::Parser;
+
 use std::io::{self, Write};
 
 use rand::Rng;
 use std::{thread, time};
+
 /// Simple program benchmark by printing hamlet
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Args {
-    /// Italics
-    #[arg(short, long, default_value_t = true)]
-    italics: bool,
-
-    /// Delay in ms on each iteration
-    #[arg(short, long, default_value_t = 0)]
-    delay: u64,
-
-    /// Enable random colors for each iteration
-    #[arg(short, long, default_value_t = false)]
-    random_color_mode: bool,
-
-    /// Just print, no randomness
-    #[arg(short, long, default_value_t = false)]
-    just_print: bool,
-
-    /// Benchmark mode, no prints
-    #[arg(short, long, default_value_t = false)]
-    benchmark: bool,
-}
 
 fn main() {
     let args = Args::parse();
@@ -74,6 +55,7 @@ fn main() {
                 }
             } else {
                 if args.benchmark == false {
+                    // Do not abstract print as format! allocates in heap
                     print!("{}\x08", random_char);
                 }
             }
